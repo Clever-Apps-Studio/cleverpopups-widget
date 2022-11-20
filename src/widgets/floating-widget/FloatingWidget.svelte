@@ -1,0 +1,1 @@
+<main>Floating widget</main>
