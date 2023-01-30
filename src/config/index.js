@@ -1,5 +1,5 @@
 const getConfigObject = () => ({
-  floatingWidgetId: "CP-floating-widget-id",
+  floatingWidgetId: "clever-popups-floating-widget-id",
 });
 
 export default getConfigObject

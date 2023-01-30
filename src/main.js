@@ -1,3 +1,4 @@
+import "./app.scss";
 import { init } from "./loader";
 
 // import './app.css'

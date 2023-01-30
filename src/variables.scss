@@ -1,0 +1,22 @@
+/* Variables and mixins declared here will be available in all other SCSS files */
+$border-color: #ccc;
+$light-gray: #eee;
+$text-color: #1e293b;
+$text-muted: #7b7b7b;
+$border-radius: 4px;
+$widget-width: 350px;
+$widget-padding: 8px;
+$widget-light-bg: #fff;
+$widget-dark-bg: #0f172a;
+$success: #008060;
+
+@mixin basic-light-widget {
+    background-color: $widget-light-bg;
+    color: $text-color;
+    border: 1px solid $border-color;
+}
+
+@mixin basic-dark-widget {
+    background-color: $widget-dark-bg;
+    color: $widget-light-bg;
+}

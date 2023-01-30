@@ -1,3 +1,3 @@
-export function hasElementID (id) {
+export function hasElementID(id) {
   return !!document.getElementById(id);
 }

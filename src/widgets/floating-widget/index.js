@@ -6,9 +6,6 @@ const config = getConfigObject();
 
 const FloatingWidget = new Widget({
   target: document.getElementById(config.floatingWidgetId),
-  props: {
-    name: "world",
-  },
 });
 
 window["app"] = FloatingWidget;
