@@ -7,12 +7,20 @@
 
   let interval;
   let currentInterval;
+  let startOver = false;
 
   const generateDelay = (min = 60000000, max = 180000000) => {
     return Math.floor(Math.random() * (max - min + 1)) + min;
   };
 
-  const initQue = () => {
+  export const pause = () => {
+    console.log("pause triggered");
+    clearTimeout(interval);
+    clearTimeout(currentInterval);
+  };
+
+  export const initQue = () => {
+    console.log("init----*");
     clearTimeout(interval);
     clearTimeout(currentInterval);
 
@@ -25,7 +33,7 @@
 
     currentInterval = setTimeout(() => {
       current.set(null);
-    }, 7000);
+    }, 2000);
 
     if ($queue.length) {
       queue.update((value) => {
@@ -35,8 +43,10 @@
       if (currentOrder < orderSize - 1) {
         orders.update((value) => {
           value.current = value.current + 1;
+
           return value;
         });
+        startOver = false;
       } else {
         orders.update((value) => {
           value.current = 0;
@@ -45,23 +55,17 @@
 
           return value;
         });
+        startOver = true;
+        pause();
         return;
       }
     }
-    const delay = generateDelay(10000, 15000);
-    console.log("delay---", delay);
-
+    const delay = generateDelay(3000, 5000);
     interval = setTimeout(initQue, delay);
   };
 
-  export const pause = () => {
-    console.log("pause triggered");
-    clearTimeout(interval);
-    clearTimeout(currentInterval);
-  };
-
   export const resume = () => {
-    console.log("mouseout---");
+    console.log("resume---mouseout");
     initQue();
   };
 
@@ -73,7 +77,11 @@
 
   $: if ($orders.orders) {
     // setTimeout(initQue2, 10000);
-    console.log("change");
+    console.log("orders change 4", $orders);
+    // if (!$queue.length && startOver) {
+    //   console.log("resume------start-again---again", startOver);
+    //   initQue();
+    // }
   }
 
   onMount(() => {

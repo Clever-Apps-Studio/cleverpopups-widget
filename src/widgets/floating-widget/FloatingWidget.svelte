@@ -12,13 +12,13 @@
 
   // @ts-ignore
   const shopKey = window?.clever_popups_keys?.shopId;
-  console.log("key", shopKey);
+  // @ts-ignore
+  const shopUID = window?.clever_popups_keys?.shopUID;
+  console.log("key", shopUID);
 
   // @ts-ignore
   const ivKey = window?.clever_popups_keys?.ivKey;
   const domain = window.location?.hostname;
-
-  initSocket(shopKey);
 
   let initComp;
 
@@ -31,6 +31,7 @@
   const ordersUrl = `apps/widgets/orders?key=${shopKey}&domain=${domain}&ivKey=${ivKey}`;
 
   onMount(async () => {
+    initSocket(shopUID, initComp);
     const res = await fetch(
       `${widgetSettingsUrl}?key=${shopKey}&domain=${domain}&ivKey=${ivKey}`
     );
