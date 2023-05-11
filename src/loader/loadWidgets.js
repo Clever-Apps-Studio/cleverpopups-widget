@@ -10,7 +10,7 @@ const loadWidgets = () => {
 
   //load various widgets
   if (hasFloatingWidget) {
-    import("../widgets/floating-widget").then((_) => {});
+    import("../widgets").then((_) => {});
   }
 };
 

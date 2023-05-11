@@ -11,8 +11,9 @@ export const products = derived(orders, ($orders) => {
   const currentOrder = orders[currentIdx];
 
   if (currentOrder) {
+    console.log("products---->", currentOrder.items);
     return currentOrder.items;
   }
-  console.log("products---->", currentOrder.items);
+
   return [];
 });

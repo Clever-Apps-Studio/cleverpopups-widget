@@ -61,6 +61,7 @@
       }
     }
     const delay = generateDelay(3000, 5000);
+    console.log("delay%", delay);
     interval = setTimeout(initQue, delay);
   };
 

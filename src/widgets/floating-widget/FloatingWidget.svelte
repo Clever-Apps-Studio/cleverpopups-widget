@@ -1,158 +1,77 @@
 <script>
-  import { onMount } from "svelte";
-  import { fade, fly } from "svelte/transition";
-  import { orders } from "./stores/orders";
-  import { current } from "./queue/current";
+  import { settings } from "../stores/settings";
+  import { current as currentProduct } from "../queue/current";
+  import { orders } from "../stores/orders";
 
-  import checkIcon from "../../assets/check.svg";
-  import { promisify } from "../../utils/methods";
-  import { sampleOrder } from "../../utils/constants";
-  import QueueInit from "./queue/QueueInit.svelte";
-  import { initSocket } from "./socket";
+  import PillPopup from "./PillPopup.svelte";
+  import VerticalPopup from "./VerticalPopup.svelte";
+  import HorizontalPopup from "./HorizontalPopup.svelte";
+  import Test from "./Test.svelte";
 
-  // @ts-ignore
-  const shopKey = window?.clever_popups_keys?.shopId;
-  // @ts-ignore
-  const shopUID = window?.clever_popups_keys?.shopUID;
-  console.log("key", shopUID);
+  // templates
+  import Normal from "./templates/Normal.svelte";
+  import NormalRounded from "./templates/NormalRounded.svelte";
+  import Christmas from "./templates/Christmas.svelte";
 
-  // @ts-ignore
-  const ivKey = window?.clever_popups_keys?.ivKey;
-  const domain = window.location?.hostname;
+  export let initComp;
 
-  let initComp;
+  let widgetLayout = "pill";
+  let currentSettings = null;
+  let template = null;
 
-  $: currentOrder = $orders.orders[$orders.current];
-  $: currentProduct = $current;
+  $: currentProductType = $orders.orders?.[$orders.current]?.type;
+  $: widgetSettings = $settings?.widgetSettings;
+  $: ordersSettings = widgetSettings?.orders;
+  $: addToCartSettings = widgetSettings?.addToCart;
 
-  // @ts-ignore
-  console.log("clever object", window?.clever_popups_keys);
-  const widgetSettingsUrl = `apps/widgets/widget-settings`;
-  const ordersUrl = `apps/widgets/orders?key=${shopKey}&domain=${domain}&ivKey=${ivKey}`;
-
-  onMount(async () => {
-    initSocket(shopUID, initComp);
-    const res = await fetch(
-      `${widgetSettingsUrl}?key=${shopKey}&domain=${domain}&ivKey=${ivKey}`
-    );
-    const data = await res.json();
-    console.log("res--", data);
-    console.log("next");
-
-    const ordersRes = await fetch(ordersUrl);
-    const ordersData = await ordersRes.json();
-
-    if (ordersData.success) {
-      orders.set({
-        current: 0,
-        orders: ordersData.orders,
-        size: ordersData.orders.length,
-      });
+  $: if ($currentProduct) {
+    console.log("current product type*****", currentProductType);
+    switch (currentProductType) {
+      case "order":
+        widgetLayout = ordersSettings.layout;
+        currentSettings = ordersSettings;
+        template = ordersSettings.template;
+        break;
+      case "add-to-cart":
+        widgetLayout = addToCartSettings.layout;
+        currentSettings = addToCartSettings;
+        template = ordersSettings.template;
+        break;
+      default:
+        widgetLayout = "pill";
+        currentSettings = ordersSettings;
+        template = ordersSettings.template;
     }
-    console.log("orders-->", ordersData);
-  });
+  }
 </script>
 
 <main>
-  <QueueInit bind:this={initComp} />
-  {#if currentProduct}
-    <div
-      class="container"
-      in:fly={{ y: 200, duration: 2000 }}
-      out:fade
-      on:mouseenter={() => {
-        initComp.pause();
-      }}
-      on:mouseleave={() => {
-        initComp.resume();
-      }}
-    >
-      <div class="image">
-        <img src={currentProduct?.image?.src} alt="product" />
-      </div>
-      <div class="ca-cp-right">
-        <div class="ca-cp-title">
-          Someone in {currentOrder.city}, {currentOrder.country}
-        </div>
-        <p class="ca-cp-body">purchased {currentProduct.name}</p>
-        <div class="ca-cp-footer">
-          <div class="ca-cp-badge">
-            <div class="ca-cp-icon"><img src={checkIcon} alt="check" /></div>
-            Verified by CleverPopups
-          </div>
-          <div class="ca-cp-time">1hour ago</div>
-        </div>
-      </div>
-    </div>
+  <!-- <PillPopup {initComp} settings={currentSettings} /> -->
+
+  {#if template?.isActive}
+    {#if template?.template === "normal"}
+      <Normal
+        {initComp}
+        settings={currentSettings}
+        isDarkMode={template.isDarkMode}
+      />
+    {:else if template?.template === "normalRounded"}
+      <NormalRounded
+        {initComp}
+        settings={currentSettings}
+        isDarkMode={template.isDarkMode}
+      />
+    {:else if template?.template === "christmas"}
+      <Christmas {initComp} settings={currentSettings} />
+    {/if}
+  {:else if widgetLayout === "pill"}
+    <PillPopup {initComp} settings={currentSettings} />
+  {:else if widgetLayout === "vertical"}
+    <VerticalPopup {initComp} settings={currentSettings} />
+  {:else if widgetLayout === "horizontal"}
+    <HorizontalPopup {initComp} settings={currentSettings} />
   {/if}
 </main>
 
-<style lang="scss">
-  .container {
-    position: fixed;
-    display: flex;
-    bottom: 10px;
-    left: 10px;
-    min-width: $widget-width;
-    border-radius: $border-radius;
-    padding: $widget-padding;
-    z-index: 1000000;
-    @include basic-light-widget;
-
-    .image {
-      position: relative;
-      width: 100px;
-      /* height: 40px; */
-      background-color: $light-gray;
-      margin-right: 10px;
-      border-radius: $border-radius;
-      overflow: hidden;
-
-      img {
-        width: 100%;
-        height: 100%;
-      }
-    }
-    .ca-cp-right {
-      width: 100%;
-    }
-
-    .ca-cp-title {
-      font-size: 16px;
-      font-weight: bold;
-    }
-
-    .ca-cp-body {
-      margin: 0;
-      font-size: 14px;
-    }
-
-    .ca-cp-footer {
-      font-size: 14px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-top: 5px;
-
-      .ca-cp-badge {
-        display: flex;
-        align-items: center;
-
-        .ca-cp-icon {
-          display: flex;
-          align-items: center;
-          margin-right: 3px;
-
-          img {
-            width: 24px;
-            height: 24px;
-          }
-        }
-      }
-
-      .ca-cp-time {
-        color: $text-muted;
-      }
-    }
-  }
+<style>
 </style>

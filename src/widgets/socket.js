@@ -1,5 +1,6 @@
 import io from "socket.io-client";
 import { orders } from "./stores/orders";
+import useTypeTransform from "../hooks/useTypeTransformer";
 
 export const initSocket = (shopKey, initComp) => {
   const socket = io("https://hungry-donkey-83.telebit.io");
@@ -10,11 +11,12 @@ export const initSocket = (shopKey, initComp) => {
 
   socket.on("newOrder", async (details) => {
     console.log("details-webhook-socket", details);
+    const transformedDetails = useTypeTransform(details, "order");
     await orders.update((store) => {
       let list = store.orders;
       let size = store.size;
       if (size === 0) {
-        list = [details];
+        list = [transformedDetails];
         return {
           ...store,
           orders: list,
@@ -22,7 +24,7 @@ export const initSocket = (shopKey, initComp) => {
         };
       }
 
-      list = [...list, details];
+      list = [...list, transformedDetails];
       size = size + 1;
       return {
         ...store,

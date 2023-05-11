@@ -1,7 +1,7 @@
 <script>
 </script>
 
-<main>hi</main>
+<main />
 
 <style>
 </style>
