@@ -19,6 +19,7 @@
   "dependencies": {
     "@vitejs/plugin-legacy": "^3.0.1",
     "javascript-time-ago": "^2.5.9",
+    "nanoid": "^4.0.2",
     "socket.io-client": "^4.5.4",
     "vite-plugin-css-injected-by-js": "^2.1.1",
     "vite-plugin-singlefile": "^0.13.2"

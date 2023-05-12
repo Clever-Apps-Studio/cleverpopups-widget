@@ -11,6 +11,8 @@
 
   export let initComp;
   export let settings;
+  export let shopKey;
+
   let title = "";
   let body = "";
   let hideTime = false;
@@ -18,7 +20,7 @@
   let date = null;
   let checkColor = "#008060";
 
-  const { trackView, trackClick } = useTracker();
+  const { trackEvent } = useTracker(shopKey);
 
   $: currentOrder = $orders.orders[$orders.current];
   $: currentProduct = $current;
@@ -69,8 +71,7 @@
   console.log("clever object", window?.clever_popups_keys);
 
   onMount(() => {
-    trackView();
-    console.log("mounted-----");
+    trackEvent("view", "pill");
   });
 </script>
 
@@ -91,7 +92,8 @@
       initComp.resume();
     }}
     on:click={() => {
-      trackClick();
+      trackEvent("click", "pill");
+      console.log("click----");
     }}
   >
     <div class="image">

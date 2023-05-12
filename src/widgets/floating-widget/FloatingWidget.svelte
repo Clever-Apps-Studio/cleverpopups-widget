@@ -14,6 +14,7 @@
   import Christmas from "./templates/Christmas.svelte";
 
   export let initComp;
+  export let shopKey;
 
   let widgetLayout = "pill";
   let currentSettings = null;
@@ -65,7 +66,7 @@
       <Christmas {initComp} settings={currentSettings} />
     {/if}
   {:else if widgetLayout === "pill"}
-    <PillPopup {initComp} settings={currentSettings} />
+    <PillPopup {initComp} settings={currentSettings} {shopKey} />
   {:else if widgetLayout === "vertical"}
     <VerticalPopup {initComp} settings={currentSettings} />
   {:else if widgetLayout === "horizontal"}

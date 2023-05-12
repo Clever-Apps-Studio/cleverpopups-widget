@@ -8,7 +8,6 @@
   import useTypeTransform from "../hooks/useTypeTransformer";
   import { useTracker } from "../hooks/useTracker";
 
-  const { trackVisit } = useTracker();
   // @ts-ignore
   const shopKey = window?.clever_popups_keys?.shopId;
   // @ts-ignore
@@ -80,13 +79,11 @@
     initSocket(shopUID, initComp);
 
     await fetchSettings();
-
-    trackVisit();
   });
 </script>
 
 <main>
   <QueueInit bind:this={initComp} />
 
-  <FloatingWidget {initComp} />
+  <FloatingWidget {initComp} {shopKey} />
 </main>

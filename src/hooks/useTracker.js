@@ -1,34 +1,68 @@
+import { nanoid } from "nanoid";
+
 import { user } from "../widgets/stores/user";
 import { useIP } from "./useIP";
 const { fetchIP } = useIP();
 
-import { addVisitorApi, addVisitApi, addViewApi, addClickApi } from "../api";
+import { identifyApi, sendEventApi } from "../api";
 
-export const useTracker = () => {
-  const trackVisit = async () => {
-    const ip = await fetchIP();
-    const details = await getLocation(ip);
-    const os = getVisitorOs();
-    user.set({ visitorIP: ip, ipDetails: details, os: os });
-  };
+export const useTracker = (shopKey = "") => {
+  const identify = async () => {
+    let uid;
+    const existingUid = localStorage.getItem("cl-pop-uid");
+    const existingDetails = localStorage.getItem("cl-pop-details");
 
-  const trackView = () => {
-    user.subscribe(handleTrackView);
-    console.log("step 1");
-    function handleTrackView({ visitorIP, ipDetails, os }) {
-      if (!visitorIP) return;
-      console.log("step 2");
+    if (existingUid) {
+      uid = existingUid;
+      user.set({ details: JSON.parse(existingDetails) });
+    } else {
+      uid = nanoid();
+      const ip = await fetchIP();
+      const details = await getLocation(ip);
+      const os = getVisitorOs();
+      delete details.status;
       const payload = {
-        ip: visitorIP,
-        details: ipDetails,
-        os: os,
+        ...details,
+        os,
+        ip,
+        id: uid,
+        shopId: shopKey,
       };
 
-      console.log("detailss---->>>", payload);
+      console.log("identify --->", payload);
+
+      await identifyApi(payload);
+      await user.set({ details: payload });
+      localStorage.setItem("cl-pop-uid", uid);
+      localStorage.setItem("cl-pop-details", JSON.stringify(payload));
     }
   };
 
-  const trackClick = () => {};
+  const trackEvent = async (eventType = "", widgetType = "") => {
+    try {
+      user.subscribe(handleTrackView);
+      console.log("step 1");
+      async function handleTrackView({ details }) {
+        if (!details) {
+          await identify();
+          return;
+        }
+        console.log("step 2");
+
+        const payload = {
+          shopId: details.shopId,
+          createdAt: new Date().toISOString(),
+          id: details.id,
+          eventType,
+          widgetType,
+        };
+        await sendEventApi(payload);
+        console.log("trackEvent---->", payload);
+      }
+    } catch (error) {
+      console.log("error --->", error);
+    }
+  };
 
   const getLocation = async (ip) => {
     const res = await fetch(`http://ip-api.com/json/${ip}`);
@@ -48,8 +82,7 @@ export const useTracker = () => {
   };
 
   return {
-    trackVisit,
-    trackView,
-    trackClick,
+    identify,
+    trackEvent,
   };
 };
