@@ -8,6 +8,7 @@
   import { useTracker } from "../../hooks/useTracker";
 
   import Check from "../../assets/Check.svelte";
+  import { widgetTypes } from "../../utils/constants";
 
   export let initComp;
   export let settings;
@@ -71,55 +72,56 @@
   console.log("clever object", window?.clever_popups_keys);
 
   onMount(() => {
-    trackEvent("view", "pill");
+    if (currentProduct) {
+      trackEvent("view", widgetTypes[1]);
+    }
   });
 </script>
 
 <main>
-  <!-- {#if currentProduct} -->
-  <!-- svelte-ignore a11y-click-events-have-key-events -->
-  <div
-    class="container"
-    class:bl={position === "bl"}
-    class:br={position === "br"}
-    class:tr={position === "tr"}
-    class:tl={position === "tl"}
-    style={styles}
-    on:mouseenter={() => {
-      initComp.pause();
-    }}
-    on:mouseleave={() => {
-      initComp.resume();
-    }}
-    on:click={() => {
-      trackEvent("click", "pill");
-      console.log("click----");
-    }}
-  >
-    <div class="image">
-      <img src={currentProduct?.image?.src} alt="product" />
-    </div>
-    <div class="ca-cp-right">
-      <div class="ca-cp-title">
-        {title}
+  {#if currentProduct}
+    <!-- svelte-ignore a11y-click-events-have-key-events -->
+    <div
+      class="container"
+      class:bl={position === "bl"}
+      class:br={position === "br"}
+      class:tr={position === "tr"}
+      class:tl={position === "tl"}
+      style={styles}
+      on:mouseenter={() => {
+        initComp.pause();
+      }}
+      on:mouseleave={() => {
+        initComp.resume();
+      }}
+      on:click={() => {
+        trackEvent("click", widgetTypes[1]);
+      }}
+    >
+      <div class="image">
+        <img src={currentProduct?.image?.src} alt="product" />
       </div>
-      <p class="ca-cp-body">{body}</p>
-      <div class="ca-cp-footer">
-        <div>
-          <div class="ca-cp-badge">
-            <div class="ca-cp-icon"><Check color={checkColor} /></div>
-            <span>Verified</span>
-          </div>
-          <div class="ca-cp-brand">by CleverPopups</div>
+      <div class="ca-cp-right">
+        <div class="ca-cp-title">
+          {title}
         </div>
+        <p class="ca-cp-body">{body}</p>
+        <div class="ca-cp-footer">
+          <div>
+            <div class="ca-cp-badge">
+              <div class="ca-cp-icon"><Check color={checkColor} /></div>
+              <span>Verified</span>
+            </div>
+            <div class="ca-cp-brand">by CleverPopups</div>
+          </div>
 
-        {#if !hideTime}
-          <div class="ca-cp-time">{formatTimeAgo(date)}</div>
-        {/if}
+          {#if !hideTime}
+            <div class="ca-cp-time">{formatTimeAgo(date)}</div>
+          {/if}
+        </div>
       </div>
     </div>
-  </div>
-  <!-- {/if} -->
+  {/if}
 </main>
 
 <style lang="scss">

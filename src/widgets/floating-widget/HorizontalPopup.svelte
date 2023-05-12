@@ -8,6 +8,7 @@
   import { useTracker } from "../../hooks/useTracker";
 
   import Check from "../../assets/Check.svelte";
+  import { widgetTypes } from "../../utils/constants";
 
   export let initComp;
   export let settings;
@@ -19,7 +20,7 @@
   let date = null;
   let checkColor = "#008060";
 
-  const { trackView, trackClick } = useTracker();
+  const { trackEvent } = useTracker();
 
   $: currentOrder = $orders.orders[$orders.current];
   $: currentProduct = $current;
@@ -70,7 +71,9 @@
   console.log("clever object", window?.clever_popups_keys);
 
   onMount(() => {
-    trackView();
+    if (currentProduct) {
+      trackEvent("view", widgetTypes[2]);
+    }
   });
 </script>
 
@@ -93,7 +96,7 @@
         initComp.resume();
       }}
       on:click={() => {
-        trackClick();
+        trackEvent("click", widgetTypes[2]);
       }}
     >
       <div class="image">

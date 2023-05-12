@@ -418,3 +418,12 @@ export const sampleOrder = {
     },
   ],
 };
+
+export const widgetTypes = {
+  1: "pill",
+  2: "horizontal",
+  3: "vertical",
+  4: "christmas",
+  5: "normal",
+  6: "normal_rounded",
+};
