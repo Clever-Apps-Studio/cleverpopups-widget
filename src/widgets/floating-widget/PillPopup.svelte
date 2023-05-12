@@ -88,6 +88,8 @@
       class:tr={position === "tr"}
       class:tl={position === "tl"}
       style={styles}
+      in:fly={{ y: 200, duration: 2000 }}
+      out:fade
       on:mouseenter={() => {
         initComp.pause();
       }}
