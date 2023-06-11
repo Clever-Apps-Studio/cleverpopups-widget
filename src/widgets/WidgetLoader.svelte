@@ -85,5 +85,5 @@
 <main>
   <QueueInit bind:this={initComp} />
 
-  <FloatingWidget {initComp} {shopKey} />
+  <FloatingWidget {initComp} shopKey={shopUID} />
 </main>

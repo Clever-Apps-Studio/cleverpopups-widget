@@ -2,6 +2,7 @@ import { nanoid } from "nanoid";
 
 import { user } from "../widgets/stores/user";
 import { useIP } from "./useIP";
+import { useTransformIpDetails } from "./useTransformIpDetails";
 const { fetchIP } = useIP();
 
 import { identifyApi, sendEventApi } from "../api";
@@ -29,45 +30,42 @@ export const useTracker = (shopKey = "") => {
         shopId: shopKey,
       };
 
-      console.log("identify --->", payload);
-
-      await identifyApi(payload);
-      await user.set({ details: payload });
-      localStorage.setItem("cl-pop-uid", uid);
-      localStorage.setItem("cl-pop-details", JSON.stringify(payload));
+      const res = await identifyApi(payload);
+      if (res.success) {
+        user.set({ details: payload });
+        localStorage.setItem("cl-pop-uid", uid);
+        localStorage.setItem("cl-pop-details", JSON.stringify(payload));
+      }
     }
   };
 
   const trackEvent = async (eventType = "", widgetType = "") => {
     try {
       user.subscribe(handleTrackView);
-      console.log("step 1");
       async function handleTrackView({ details }) {
         if (!details) {
           await identify();
           return;
         }
-        console.log("step 2");
 
         const payload = {
           shopId: details.shopId,
-          createdAt: new Date().toISOString(),
           id: details.id,
           eventType,
           widgetType,
         };
-        await sendEventApi(payload);
-        console.log("trackEvent---->", payload);
+        const res = await sendEventApi(payload);
       }
     } catch (error) {
-      console.log("error --->", error);
+      console.log("trackEvent-error --->", error);
     }
   };
 
   const getLocation = async (ip) => {
-    const res = await fetch(`http://ip-api.com/json/${ip}`);
+    const res = await fetch(`https://ipapi.co/${ip}/json/`);
     const data = await res.json();
-    return data;
+    const details = useTransformIpDetails(data);
+    return details;
   };
 
   const getVisitorOs = () => {

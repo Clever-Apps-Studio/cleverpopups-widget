@@ -67,14 +67,12 @@
   `
     : "";
 
+  $: if (currentProduct) {
+    trackEvent("view", widgetTypes[2]);
+  }
+
   // @ts-ignore
   console.log("clever object", window?.clever_popups_keys);
-
-  onMount(() => {
-    if (currentProduct) {
-      trackEvent("view", widgetTypes[2]);
-    }
-  });
 </script>
 
 <main>
@@ -96,6 +94,7 @@
         initComp.resume();
       }}
       on:click={() => {
+        window.open(currentProduct.link, "_self");
         trackEvent("click", widgetTypes[2]);
       }}
     >
