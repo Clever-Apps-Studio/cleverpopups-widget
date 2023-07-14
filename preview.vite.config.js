@@ -9,10 +9,11 @@ export default defineConfig({
   build: {
     // ssr: true,
     cssCodeSplit: false,
+
     rollupOptions: {
-      input: "./src/main.js",
+      input: "./src/preview/index.js",
       output: {
-        dir: "./build/main",
+        dir: "./build/preview",
         manualChunks: () => "everything.js",
       },
     },

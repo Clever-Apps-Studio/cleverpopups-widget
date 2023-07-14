@@ -4,9 +4,10 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite -c preview.vite.config.js",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "preview:build": "vite build -c preview.vite.config.js"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^1.1.0",

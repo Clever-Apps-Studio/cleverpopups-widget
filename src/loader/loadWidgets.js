@@ -7,7 +7,6 @@ const loadWidgets = () => {
 
   //load head links and tags
   import("../config/head-configs").then((_) => {});
-
   //load various widgets
   if (hasFloatingWidget) {
     import("../widgets").then((_) => {});

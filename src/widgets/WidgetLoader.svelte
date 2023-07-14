@@ -6,7 +6,6 @@
   import QueueInit from "./queue/QueueInit.svelte";
   import FloatingWidget from "./floating-widget/FloatingWidget.svelte";
   import useTypeTransform from "../hooks/useTypeTransformer";
-  import { useTracker } from "../hooks/useTracker";
 
   // @ts-ignore
   const shopKey = window?.clever_popups_keys?.shopId;

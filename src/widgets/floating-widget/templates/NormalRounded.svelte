@@ -170,6 +170,8 @@
       }
     }
     .ca-cp-right {
+      display: flex;
+      flex-direction: column;
       width: 100%;
     }
 
@@ -181,6 +183,7 @@
     .ca-cp-body {
       margin: 0;
       font-size: 14px;
+      margin-top: auto;
     }
 
     .ca-cp-footer {
@@ -188,7 +191,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-top: 5px;
+      margin-top: auto;
 
       .ca-cp-badge {
         display: flex;

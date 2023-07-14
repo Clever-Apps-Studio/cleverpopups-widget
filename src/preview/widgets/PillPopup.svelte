@@ -1,55 +1,45 @@
 <script>
-  import { onMount } from "svelte";
-  import { fade, fly } from "svelte/transition";
-  import { orders } from "../stores/orders";
-  import { current } from "../queue/current";
-
   import { formatTimeAgo } from "../../utils/methods";
-  import { useTracker } from "../../hooks/useTracker";
 
   import Check from "../../assets/Check.svelte";
-  import { widgetTypes } from "../../utils/constants";
 
-  export let initComp;
   export let settings;
-  export let shopKey;
 
   let title = "";
   let body = "";
   let hideTime = false;
+  let productImg =
+    "https://www.ubuy.com.gh/productimg/?image=aHR0cHM6Ly9tLm1lZGlhLWFtYXpvbi5jb20vaW1hZ2VzL0kvNTFKYnNIU2t0a0wuX0FDX1NMMTUwMF8uanBn.jpg";
 
   let date = null;
   let checkColor = "#008060";
 
-  const { trackEvent } = useTracker(shopKey);
-
-  $: currentOrder = $orders.orders[$orders.current];
-  $: currentProduct = $current;
   $: position = settings?.position || "bl";
 
   $: if (settings?.title) {
     title = settings.title;
-    title = title.replace("{{city}}", currentOrder?.city);
-    title = title.replace("{{country}}", currentOrder?.country);
+    title = title.replace("{{city}}", "California");
+    title = title.replace("{{country}}", "United States");
 
     if (settings.anonymousActive) {
       title = title.replace("{{first_name}}", settings.anonymousFallback);
     } else {
-      title = title.replace("{{first_name}}", currentOrder?.customerFirstName);
+      title = title.replace("{{first_name}}", "Ben");
     }
 
     body = settings.body;
-    body = body.replace("{{product_title}}", currentProduct?.name);
+    body = body.replace("{{product_title}}", "Bose headset");
 
     // hide or show time
-    const orderDate = new Date(currentOrder?.createdAt);
+    const orderDate = new Date();
+    orderDate.setDate(orderDate.getDate() - 1);
     const currentDate = new Date(Date.now());
     const diff =
       Math.abs(orderDate.getTime() - currentDate.getTime()) / 3600000;
 
     if (diff < settings?.hideTimeAfter) {
       hideTime = false;
-      date = new Date(currentOrder?.createdAt);
+      date = orderDate;
     } else {
       hideTime = true;
     }
@@ -67,87 +57,66 @@
     color: ${settings.textColor};
   `
     : "";
-
-  $: if (currentProduct) {
-    trackEvent("view", widgetTypes[1]);
-  }
-
-  // @ts-ignore
-  console.log("clever object", window?.clever_popups_keys);
 </script>
 
 <main>
-  {#if currentProduct}
-    <!-- svelte-ignore a11y-click-events-have-key-events -->
-    <div
-      class="container"
-      class:bl={position === "bl"}
-      class:br={position === "br"}
-      class:tr={position === "tr"}
-      class:tl={position === "tl"}
-      style={styles}
-      in:fly={{ y: 200, duration: 2000 }}
-      out:fade
-      on:mouseenter={() => {
-        initComp.pause();
-      }}
-      on:mouseleave={() => {
-        initComp.resume();
-      }}
-      on:click={() => {
-        window.open(currentProduct.link, "_self");
-        trackEvent("click", widgetTypes[1]);
-      }}
-    >
-      <div class="image">
-        <img src={currentProduct?.image?.src} alt="product" />
+  <!-- svelte-ignore a11y-click-events-have-key-events -->
+  <div
+    class="container"
+    class:bl={position === "bl"}
+    class:br={position === "br"}
+    class:tr={position === "tr"}
+    class:tl={position === "tl"}
+    style={styles}
+  >
+    <div class="image">
+      <img src={productImg} alt="product" />
+    </div>
+    <div class="ca-cp-right">
+      <div class="ca-cp-title">
+        {title}
       </div>
-      <div class="ca-cp-right">
-        <div class="ca-cp-title">
-          {title}
-        </div>
-        <p class="ca-cp-body">{body}</p>
-        <div class="ca-cp-footer">
-          <div>
-            <div class="ca-cp-badge">
-              <div class="ca-cp-icon"><Check color={checkColor} /></div>
-              <span>Verified</span>
-            </div>
-            <div class="ca-cp-brand">by CleverPopups</div>
+      <p class="ca-cp-body">{body}</p>
+      <div class="ca-cp-footer">
+        <div>
+          <div class="ca-cp-badge">
+            <div class="ca-cp-icon"><Check color={checkColor} /></div>
+            <span>Verified</span>
           </div>
-
-          {#if !hideTime}
-            <div class="ca-cp-time">{formatTimeAgo(date)}</div>
-          {/if}
+          <div class="ca-cp-brand">by CleverPopups</div>
         </div>
+
+        {#if !hideTime}
+          <div class="ca-cp-time">{formatTimeAgo(date)}</div>
+        {/if}
       </div>
     </div>
-  {/if}
+  </div>
 </main>
 
 <style lang="scss">
   .bl {
-    bottom: 10px;
-    left: 10px;
+    top: 10px;
+    right: 10px;
   }
 
   .br {
-    bottom: 10px;
-    right: 10px;
-  }
-
-  .tr {
-    top: 10px;
-    right: 10px;
-  }
-
-  .tl {
     top: 10px;
     left: 10px;
   }
 
+  .tr {
+    bottom: 10px;
+    left: 10px;
+  }
+
+  .tl {
+    bottom: 10px;
+    right: 10px;
+  }
+
   .container {
-    position: fixed;
+    position: relative;
     display: flex;
     min-width: $widget-width;
     border-radius: $border-radius;
@@ -183,17 +152,17 @@
 
     .ca-cp-body {
       margin: 0;
-      font-size: 14px;
       margin-top: auto;
+      font-size: 14px;
     }
 
     .ca-cp-footer {
-      margin-top: auto;
       font-size: 14px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin-top: 5px;
+      margin-top: auto;
 
       .ca-cp-badge {
         display: flex;
@@ -219,6 +188,7 @@
 
       .ca-cp-time {
         font-size: 13px;
+        align-self: flex-end;
       }
     }
   }
