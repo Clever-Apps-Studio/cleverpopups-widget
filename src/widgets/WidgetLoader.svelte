@@ -26,8 +26,8 @@
 
   let initComp;
   let loading = false;
-  const widgetSettingsUrl = `apps/widgets/widget-settings`;
-  const ordersUrl = `apps/widgets/orders?key=${shopKey}&domain=${domain}&ivKey=${ivKey}`;
+  const widgetSettingsUrl = `apps/api/widget-settings`;
+  const ordersUrl = `apps/api/orders?key=${shopKey}&domain=${domain}&ivKey=${ivKey}`;
 
   const fetchOrders = async () => {
     loading = true;

@@ -3,7 +3,8 @@ import { orders } from "./stores/orders";
 import useTypeTransform from "../hooks/useTypeTransformer";
 
 export const initSocket = (shopKey, initComp) => {
-  const socket = io("https://hungry-donkey-83.telebit.io");
+  // const socket = io("https://hungry-donkey-83.telebit.io");
+  const socket = io("https://cleverpopups-socket-715f2b2590f9.herokuapp.com/");
 
   socket.on("connect", () => {
     console.log("Socket-status", socket.connected); // true

@@ -1,5 +1,5 @@
-const contactsUrl = `apps/widgets/contacts`;
-const eventsUrl = `apps/widgets/events`;
+const contactsUrl = `apps/api/contacts`;
+const eventsUrl = `apps/api/events`;
 
 export const identifyApi = async (details) => {
   try {
