@@ -33,7 +33,7 @@
 
     currentInterval = setTimeout(() => {
       current.set(null);
-    }, 2000);
+    }, 8000);
 
     if ($queue.length) {
       queue.update((value) => {
