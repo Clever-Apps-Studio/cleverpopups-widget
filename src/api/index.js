@@ -1,5 +1,6 @@
-const contactsUrl = `apps/api/contacts`;
-const eventsUrl = `apps/api/events`;
+  const origin = window.loction.origin
+const contactsUrl = `${origin}/apps/api/contacts`;
+const eventsUrl = `${origin}/apps/api/events`;
 
 export const identifyApi = async (details) => {
   try {

@@ -5,9 +5,9 @@ const config = getConfigObject();
 const target = document.getElementById(config.previewWidgetId);
 console.log("the target------>>>", target);
 
-if (target) {
-  target.innerHTML = "";
-}
+// if (target) {
+//   target.innerHTML = "";
+// }
 
 const Loader = new PreviewLoader({
   target: target,
