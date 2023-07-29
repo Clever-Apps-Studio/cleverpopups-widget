@@ -26,7 +26,7 @@
 
   let initComp;
   let loading = false;
-  const origin = window.loction.origin
+  const origin = window.location.origin;
   const widgetSettingsUrl = `${origin}/apps/api/widget-settings`;
   const ordersUrl = `${origin}/apps/api/orders?key=${shopKey}&domain=${domain}&ivKey=${ivKey}`;
 

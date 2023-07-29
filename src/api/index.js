@@ -1,4 +1,4 @@
-  const origin = window.loction.origin
+const origin = window.location.origin;
 const contactsUrl = `${origin}/apps/api/contacts`;
 const eventsUrl = `${origin}/apps/api/events`;
 
