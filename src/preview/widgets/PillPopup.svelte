@@ -121,8 +121,9 @@
     min-width: $widget-width;
     border-radius: $border-radius;
     padding: $widget-padding;
-    z-index: 1000000;
+    z-index: 500;
     cursor: pointer;
+    overflow: hidden;
     @include basic-light-widget;
 
     .image {

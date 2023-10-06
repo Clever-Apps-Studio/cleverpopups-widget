@@ -27,7 +27,8 @@ export const useTracker = (shopKey = "") => {
         os,
         ip,
         id: uid,
-        shopId: shopKey,
+        // @ts-ignore
+        shopId: shopKey || window.clever_popups_keys?.shopId || null,
       };
 
       const res = await identifyApi(payload);

@@ -123,8 +123,9 @@
     width: $widget-hl-width;
     height: 250px;
     border-radius: $border-radius;
-    z-index: 1000000;
+    z-index: 500;
     cursor: pointer;
+    overflow: hidden;
     @include basic-light-widget;
 
     .image {

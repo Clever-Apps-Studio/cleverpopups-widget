@@ -9,9 +9,8 @@
 
   // @ts-ignore
   const shopKey = window?.clever_popups_keys?.shopId;
-  // @ts-ignore
-  const shopUID = window?.clever_popups_keys?.shopUID;
-  console.log("key", shopUID);
+
+  console.log("key", shopKey);
 
   // @ts-ignore
   const ivKey = window?.clever_popups_keys?.ivKey;
@@ -42,10 +41,7 @@
         orders: transformedData,
         size: transformedData.length,
       });
-
-      console.log("transformedData---->>>>", transformedData);
     }
-    console.log("orders----", ordersData);
     loading = false;
   };
 
@@ -71,12 +67,11 @@
   };
 
   $: if (widgetSettings?.orders?.isActive) {
-    console.log("orders settings>>>1", widgetSettings);
     fetchOrders();
   }
 
   onMount(async () => {
-    initSocket(shopUID, initComp);
+    initSocket(shopKey, initComp);
 
     await fetchSettings();
   });
@@ -85,5 +80,5 @@
 <main>
   <QueueInit bind:this={initComp} />
 
-  <FloatingWidget {initComp} shopKey={shopUID} />
+  <FloatingWidget {initComp} {shopKey} />
 </main>

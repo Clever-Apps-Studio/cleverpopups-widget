@@ -43,7 +43,8 @@ export const initSocket = (shopKey, initComp) => {
 
   socket.emit("join", shopKey, (error) => {
     if (error) {
-      console.log("join error----");
+      console.log("join error----", error);
+      console.log("shop key-----", shopKey);
       return;
     }
 

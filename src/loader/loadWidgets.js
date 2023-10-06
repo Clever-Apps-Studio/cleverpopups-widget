@@ -10,6 +10,9 @@ const loadWidgets = () => {
   //load various widgets
   if (hasFloatingWidget) {
     import("../widgets").then((_) => {});
+
+    //this widget is not ready yet
+    import("../widgets/spin-to-win").then((_) => {});
   }
 };
 

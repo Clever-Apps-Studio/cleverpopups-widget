@@ -10,6 +10,9 @@
   import Check from "../../assets/Check.svelte";
   import { widgetTypes } from "../../utils/constants";
 
+  import { useLocalStorage } from "../../hooks/useLocalStorage";
+
+  const { setWithExpiry } = useLocalStorage();
   export let initComp;
   export let settings;
   export let shopKey;

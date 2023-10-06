@@ -12,11 +12,6 @@
   // @ts-ignore
   let currentWidget = window?.cleverpopups_current_widget;
 
-  // // @ts-ignore
-  // window.cleverpopups_current_widget = null;
-  // // @ts-ignore
-  // window.cleverpopups_widget_settings = null;
-
   $: currentSettings = settings ? settings?.[currentWidget] : null;
   $: template = currentSettings?.template;
   $: layout = currentSettings?.layout;
@@ -41,6 +36,18 @@
       settings = value;
     },
   });
+
+  if (
+    // @ts-ignore
+    !window.cleverpopups_widget_settings ||
+    // @ts-ignore
+    !window.cleverpopups_current_widget
+  ) {
+    // @ts-ignore
+    window.cleverpopups_current_widget = currentWidget;
+    // @ts-ignore
+    window.cleverpopups_widget_settings = settings;
+  }
 </script>
 
 <main>
